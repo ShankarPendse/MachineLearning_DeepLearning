@@ -422,7 +422,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.009,
 _, _, parameters = model(X_train, Y_train, X_test, Y_test)
 
 
-# Congratulations! You have finised the assignment and built a model that recognizes SIGN language with almost 80% accuracy on the test set. If you wish, feel free to play around with this dataset further. You can actually improve its accuracy by spending more time tuning the hyperparameters, or using regularization (as this model clearly has a high variance). 
+# This model has high variance and gives us around 80% accuracy
 
 fname = "images/thumbs_up.jpg"
 image = np.array(ndimage.imread(fname, flatten=False))
