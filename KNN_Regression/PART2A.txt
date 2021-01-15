@@ -1,0 +1,72 @@
+1) def generate_centroids(feature_data, k):
+    ''' This function accepts as arguments, feature data and k which is an integer, which determines
+        how many centroids to be selected.
+        
+        returns randomly selected k feature data points as initial centroids'''
+    
+    indices = random.sample(range(len(feature_data)), k=k)
+    centroids = feature_data[indices]
+    return centroids
+
+2) def assign_centroids(feature_data, centroids):
+    '''This function accepts as arguments, feature data and initially selected k number of centroids
+       calculates the distance between each feature data and the centroids, assigns the nearest data 
+       points to the respective centroids
+       
+       returns a 1D Numpy array containing indices of the centroids assigned to each feature data poin
+       '''
+    
+    centroid_indices = []
+    for data in feature_data:
+        centroid_indices.append(np.argmin(calculate_distances(centroids, data)))
+    return np.array(centroid_indices)
+
+3) def move_centroids(feature_data, centroid_indices, centroids):
+    '''This function accepts as arguments, feature data, centroid indices (obtained from assign centroids function)
+       and centroids
+       
+       returns the new centroids which is equal to the mean value of the feature data points assigned to respective centroids
+       '''
+    new_centroids = [feature_data[centroid_indices == i].mean(axis = 0) for i in range(len(centroids))]
+    return np.array(new_centroids)
+
+4) def calculate_cost(feature_data, centroid_indices, centroids):
+    '''Accepts as argument, feature data, centroid indices and centroids
+       
+       returns the distortion cost value'''
+    
+    cost = np.mean(np.sum(np.square(centroids[centroid_indices] - feature_data), axis = 1))
+    return cost
+
+5) def restart_KMeans(feature_data, no_of_centroids, no_iterations = 10, no_restarts = 10):
+    '''Accepts as arguments, feature data, number of centroids to be initialized at start,
+       for how many iterations we need to assign and move the centroids and how many times
+       we can restart the above process (Run KMeans)
+       
+       returns the best cost and related centroids for each restart of KMeans
+       '''
+    
+    bestcost = float('inf')
+    for restart_ind in range(no_restarts):
+        centroids = generate_centroids(feature_data, no_of_centroids)
+        for iteration in range(no_iterations):
+            centroid_indices = assign_centroids(feature_data, centroids)
+            centroids = move_centroids(feature_data, centroid_indices, centroids)
+        cost = calculate_cost(feature_data, centroid_indices, centroids)
+        if cost < bestcost:
+            bestcost = cost
+            bestcentroids = centroids.copy()
+    return bestcost, bestcentroids
+
+6) def visualize(no_of_clusters, costs):
+    '''This function takes as arguments number of clusters and costs as python lists
+       plots the graph with number of clusters on X-axis and cost value on Y-axis
+       '''
+    
+    plt.plot(no_of_clusters, costs)
+    plt.title("Cost Vs No_of_Centroids")
+    plt.xlabel("No_of_Centroids(K)")
+    plt.ylabel("Distortion Function value(cost)")
+    plt.grid(True)
+
+
