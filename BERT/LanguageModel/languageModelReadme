@@ -1,9 +1,0 @@
-First command to run:
-python pregenerate_training_data.py --train_corpus=Unique_Riskdesc1.txt --bert_model=bert-base-uncased --do_lower_case --output_dir=training/ --epochs_to_generate=3 --max_seq_len=256
-
-once above is done, it generates trainings ready data from unique_Riskdesc1.txt then we need to run below command to fine tuen:
-
-python finetune_on_pregenerated.py --pregenerated_data=training/ --bert_model=bert-base-uncased --do_lower_case --output_dir=finetuned_lm/ --epochs=3
-
-
-Better to have all these 3 files under same path, so we can directly run the above commands
